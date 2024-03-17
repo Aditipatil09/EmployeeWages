@@ -1,15 +1,11 @@
-import java.util.Random;
- class employeeattendance {
+class EmployeeWages {
     public static void main(String args[]){
-        int attendanceStatus = generateRandomAttendance();
-        if(attendanceStatus ==1){
-            System.out.println("Employee is Present");
-        }else {
-            System.out.println("Employee is absent");
-        }
-    }
-    private static int generateRandomAttendance(){
-        Random random = new Random();
-        return random.nextInt(2);
+        final int  WAGE_PER_HOUR =20;
+        final int  WAGE_DAY_HOUR =8;
+        int dailyWage = WAGE_PER_HOUR * WAGE_DAY_HOUR;
+        System.out.println("Wage Per Hour =" +WAGE_PER_HOUR);
+        System.out.println("Full Day Hour =" +WAGE_DAY_HOUR);
+        System.out.println("Emlloyee daily Wage =" +dailyWage);
     }
 }
+
