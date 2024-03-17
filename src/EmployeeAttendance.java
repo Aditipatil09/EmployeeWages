@@ -1,32 +1,19 @@
+interface WageCalculator {
+    double computeWage(double hourlyRate, int daysWorked, int hoursPerDay);
+}
+
+
 class CompanyEmpWage {
     private String companyName;
-    private double hourlyRate;
-    private int daysWorked;
-    private int hoursPerDay;
     private double totalWage;
 
-    public CompanyEmpWage(String companyName, double hourlyRate, int daysWorked, int hoursPerDay) {
+    public CompanyEmpWage(String companyName) {
         this.companyName = companyName;
-        this.hourlyRate = hourlyRate;
-        this.daysWorked = daysWorked;
-        this.hoursPerDay = hoursPerDay;
-        this.totalWage = 0; // Initialize total wage to 0
+        totalWage = 0;
     }
 
     public String getCompanyName() {
         return companyName;
-    }
-
-    public double getHourlyRate() {
-        return hourlyRate;
-    }
-
-    public int getDaysWorked() {
-        return daysWorked;
-    }
-
-    public int getHoursPerDay() {
-        return hoursPerDay;
     }
 
     public double getTotalWage() {
@@ -38,38 +25,40 @@ class CompanyEmpWage {
     }
 }
 
-class EmpWageBuilder {
+
+class EmpWageBuilder implements WageCalculator {
     private CompanyEmpWage[] companyEmpWages;
-    private int numOfCompanies;
 
-    public EmpWageBuilder() {
-        companyEmpWages = new CompanyEmpWage[5]; // Assuming a maximum of 5 companies
-        numOfCompanies = 0;
+    public EmpWageBuilder(int numCompanies) {
+        companyEmpWages = new CompanyEmpWage[numCompanies];
     }
 
-    public void addCompanyEmpWage(String companyName, double hourlyRate, int daysWorked, int hoursPerDay) {
-        companyEmpWages[numOfCompanies] = new CompanyEmpWage(companyName, hourlyRate, daysWorked, hoursPerDay);
-        numOfCompanies++;
+    public void addCompany(String companyName, int index) {
+        companyEmpWages[index] = new CompanyEmpWage(companyName);
     }
 
-    public void computeWages() {
-        for (int i = 0; i < numOfCompanies; i++) {
-            CompanyEmpWage companyEmpWage = companyEmpWages[i];
-            int totalHoursWorked = companyEmpWage.getDaysWorked() * companyEmpWage.getHoursPerDay();
-            double totalWage = companyEmpWage.getHourlyRate() * totalHoursWorked;
-            companyEmpWage.setTotalWage(totalWage);
-            System.out.println(companyEmpWage.getCompanyName() + " employee's wage: $" + totalWage);
-        }
+    @Override
+    public double computeWage(double hourlyRate, int daysWorked, int hoursPerDay) {
+        int totalHoursWorked = daysWorked * hoursPerDay;
+        return hourlyRate * totalHoursWorked;
     }
 
     public static void main(String[] args) {
-        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
+
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder(2);
 
 
-        empWageBuilder.addCompanyEmpWage("Company 1", 12, 20, 8);
-        empWageBuilder.addCompanyEmpWage("Company 2", 15, 25, 7);
+        empWageBuilder.addCompany("Company 1", 0);
+        empWageBuilder.addCompany("Company 2", 1);
 
 
-        empWageBuilder.computeWages();
+        for (CompanyEmpWage companyEmpWage : empWageBuilder.companyEmpWages) {
+            double hourlyRate = 10; // Assuming a default hourly rate for demonstration
+            int daysWorked = 20;    // Assuming a default number of days worked for demonstration
+            int hoursPerDay = 8;    // Assuming a default number of hours worked per day for demonstration
+            double totalWage = empWageBuilder.computeWage(hourlyRate, daysWorked, hoursPerDay);
+            companyEmpWage.setTotalWage(totalWage);
+            System.out.println("Company: " + companyEmpWage.getCompanyName() + ", Total Wage: $" + totalWage);
+        }
     }
 }
