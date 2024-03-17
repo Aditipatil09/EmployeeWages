@@ -1,39 +1,75 @@
- class EmpWageBuilder {
+class CompanyEmpWage {
+    private String companyName;
+    private double hourlyRate;
+    private int daysWorked;
+    private int hoursPerDay;
     private double totalWage;
 
-
-    public EmpWageBuilder() {
-        totalWage = 0;
+    public CompanyEmpWage(String companyName, double hourlyRate, int daysWorked, int hoursPerDay) {
+        this.companyName = companyName;
+        this.hourlyRate = hourlyRate;
+        this.daysWorked = daysWorked;
+        this.hoursPerDay = hoursPerDay;
+        this.totalWage = 0; // Initialize total wage to 0
     }
 
-
-    public double computeWage(double hourlyRate, int daysWorked, int hoursPerDay) {
-        int totalHoursWorked = daysWorked * hoursPerDay;
-        totalWage = hourlyRate * totalHoursWorked;
-        return totalWage;
+    public String getCompanyName() {
+        return companyName;
     }
 
+    public double getHourlyRate() {
+        return hourlyRate;
+    }
+
+    public int getDaysWorked() {
+        return daysWorked;
+    }
+
+    public int getHoursPerDay() {
+        return hoursPerDay;
+    }
 
     public double getTotalWage() {
         return totalWage;
     }
 
+    public void setTotalWage(double totalWage) {
+        this.totalWage = totalWage;
+    }
+}
+
+class EmpWageBuilder {
+    private CompanyEmpWage[] companyEmpWages;
+    private int numOfCompanies;
+
+    public EmpWageBuilder() {
+        companyEmpWages = new CompanyEmpWage[5]; // Assuming a maximum of 5 companies
+        numOfCompanies = 0;
+    }
+
+    public void addCompanyEmpWage(String companyName, double hourlyRate, int daysWorked, int hoursPerDay) {
+        companyEmpWages[numOfCompanies] = new CompanyEmpWage(companyName, hourlyRate, daysWorked, hoursPerDay);
+        numOfCompanies++;
+    }
+
+    public void computeWages() {
+        for (int i = 0; i < numOfCompanies; i++) {
+            CompanyEmpWage companyEmpWage = companyEmpWages[i];
+            int totalHoursWorked = companyEmpWage.getDaysWorked() * companyEmpWage.getHoursPerDay();
+            double totalWage = companyEmpWage.getHourlyRate() * totalHoursWorked;
+            companyEmpWage.setTotalWage(totalWage);
+            System.out.println(companyEmpWage.getCompanyName() + " employee's wage: $" + totalWage);
+        }
+    }
 
     public static void main(String[] args) {
-
-        EmpWageBuilder company1 = new EmpWageBuilder();
-        double company1HourlyRate = 12;
-        int company1DaysWorked = 20;
-        int company1HoursPerDay = 8;
-        double company1Wage = company1.computeWage(company1HourlyRate, company1DaysWorked, company1HoursPerDay);
-        System.out.println("Company 1 employee's wage: " + company1Wage);
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
 
 
-        EmpWageBuilder company2 = new EmpWageBuilder();
-        double company2HourlyRate = 15;
-        int company2DaysWorked = 25;
-        int company2HoursPerDay = 7;
-        double company2Wage = company2.computeWage(company2HourlyRate, company2DaysWorked, company2HoursPerDay);
-        System.out.println("Company 2 employee's wage: " + company2Wage);
+        empWageBuilder.addCompanyEmpWage("Company 1", 12, 20, 8);
+        empWageBuilder.addCompanyEmpWage("Company 2", 15, 25, 7);
+
+
+        empWageBuilder.computeWages();
     }
 }
