@@ -57,6 +57,30 @@ class EmpWageBuilder implements WageCalculator {
         return hourlyRate * totalHoursWorked;
     }
 
+    public double getTotalWageByCompany(String companyName) {
+        for (CompanyEmpWage companyEmpWage : companyEmpWages) {
+            if (companyEmpWage.getCompanyName().equals(companyName)) {
+                return companyEmpWage.getTotalWage();
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
+
+
+        empWageBuilder.addCompany("Company 1");
+        empWageBuilder.addCompany("Company 2");
+
+
+        empWageBuilder.calculateWages();
+
+
+        System.out.println("Total wage for Company 1: $" + empWageBuilder.getTotalWageByCompany("Company 1"));
+    }
+
     public void calculateWages() {
         for (CompanyEmpWage companyEmpWage : companyEmpWages) {
             double hourlyRate = 10;
@@ -71,17 +95,5 @@ class EmpWageBuilder implements WageCalculator {
             System.out.println("Company: " + companyEmpWage.getCompanyName() + ", Total Wage: $" + totalWage);
             System.out.println("Daily Wages: " + companyEmpWage.getDailyWages());
         }
-    }
-
-    public static void main(String[] args) {
-        // Create EmpWageBuilder instance
-        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
-
-        // Add companies
-        empWageBuilder.addCompany("Company 1");
-        empWageBuilder.addCompany("Company 2");
-
-        // Calculate and display wages for each company
-        empWageBuilder.calculateWages();
     }
 }
