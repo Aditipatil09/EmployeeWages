@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+
+// Interface for calculating wages
 interface WageCalculator {
     double computeWage(double hourlyRate, int daysWorked, int hoursPerDay);
 }
@@ -27,14 +30,14 @@ class CompanyEmpWage {
 
 
 class EmpWageBuilder implements WageCalculator {
-    private CompanyEmpWage[] companyEmpWages;
+    private ArrayList<CompanyEmpWage> companyEmpWages;
 
-    public EmpWageBuilder(int numCompanies) {
-        companyEmpWages = new CompanyEmpWage[numCompanies];
+    public EmpWageBuilder() {
+        companyEmpWages = new ArrayList<>();
     }
 
-    public void addCompany(String companyName, int index) {
-        companyEmpWages[index] = new CompanyEmpWage(companyName);
+    public void addCompany(String companyName) {
+        companyEmpWages.add(new CompanyEmpWage(companyName));
     }
 
     @Override
@@ -43,22 +46,26 @@ class EmpWageBuilder implements WageCalculator {
         return hourlyRate * totalHoursWorked;
     }
 
-    public static void main(String[] args) {
-
-        EmpWageBuilder empWageBuilder = new EmpWageBuilder(2);
-
-
-        empWageBuilder.addCompany("Company 1", 0);
-        empWageBuilder.addCompany("Company 2", 1);
-
-
-        for (CompanyEmpWage companyEmpWage : empWageBuilder.companyEmpWages) {
+    public void calculateWages() {
+        for (CompanyEmpWage companyEmpWage : companyEmpWages) {
             double hourlyRate = 10; // Assuming a default hourly rate for demonstration
             int daysWorked = 20;    // Assuming a default number of days worked for demonstration
             int hoursPerDay = 8;    // Assuming a default number of hours worked per day for demonstration
-            double totalWage = empWageBuilder.computeWage(hourlyRate, daysWorked, hoursPerDay);
+            double totalWage = computeWage(hourlyRate, daysWorked, hoursPerDay);
             companyEmpWage.setTotalWage(totalWage);
             System.out.println("Company: " + companyEmpWage.getCompanyName() + ", Total Wage: $" + totalWage);
         }
+    }
+
+    public static void main(String[] args) {
+
+        EmpWageBuilder empWageBuilder = new EmpWageBuilder();
+
+
+        empWageBuilder.addCompany("Company 1");
+        empWageBuilder.addCompany("Company 2");
+
+
+        empWageBuilder.calculateWages();
     }
 }
